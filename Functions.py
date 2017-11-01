@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-def highcond(dim):
+def highCond(dim):
     firstSum = 0
     for count, c in enumerate(dim):
         count += 1
@@ -9,7 +9,7 @@ def highcond(dim):
     return firstSum
 
 
-def BentCig(dim):
+def bentCig(dim):
     firstSum = 0
     for c in dim[1:]:
         firstSum += np.power(c, 2)
@@ -25,14 +25,15 @@ def discus(dim):
 
 def rosen(dim):
     firstSum = 0
-    dim = dim[:-1]
-    for count, c in enumerate(dim):
-        count += 1
+    dim2 = dim[:-1]
+    for count, c in enumerate(dim2):
+        print count
         firstSum = (100 * np.power((np.power(c, 2) - dim[count + 1]), 2) + np.power((c - 1), 2))
+        count += 1
     return firstSum
 
 
-def Rosenbrock(dim):
+def Ackley(dim):
     firstSum = 0.0
     secondSum = 0.0
     for c in dim:

@@ -42,17 +42,10 @@ class population(object):
 
 
 def func(points):
-    #dimensions = len(points)
-    #cost=0
-    #for i in range(1,dimensions):
-        #y = np.power(10**6,((i-1)/(dimensions-1)))*np.power(points[i],2)
-        #print(points.shape)
-    y = highcond(points)
-        #cost = cost + y
+    y = Rosenbrock(points)
     return y
 
-    #y= plt.functions.griewank(points)
-    #highcond()
+
 
 
 def main():
@@ -73,7 +66,7 @@ def main():
         for i in range(0,pop):
             trialvec = nodes.crossover(nodes.mutation(),i)
             if func(trialvec)<=func(nodes.points[:,i]):
-                newnodes[:,i] = trialvec.reshape(2)
+                newnodes[:,i] = trialvec.reshape(dimnesions)
             else:
                 newnodes[:,i] = nodes.points[:,i]
         nodes.setpoints(newnodes)
