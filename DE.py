@@ -1,10 +1,12 @@
 import numpy as np
+from Functions import *
+
 
 class population(object):
 
 
 
-    def __init__(self, dimensions, nump=10):
+    def __init__(self, dimensions, nump=100):
 
         self.nump = nump
         self.dimensions = dimensions
@@ -40,24 +42,33 @@ class population(object):
 
 
 def func(points):
-    dimensions = len(points)
-    cost=0
-    for i in range(1,dimensions):
-        y = np.power(10**6,((i-1)/(dimensions-1)))*np.power(points[i],2)
-        cost = cost + y
-    return cost
+    #dimensions = len(points)
+    #cost=0
+    #for i in range(1,dimensions):
+        #y = np.power(10**6,((i-1)/(dimensions-1)))*np.power(points[i],2)
+        #print(points.shape)
+    y = highcond(points)
+        #cost = cost + y
+    return y
+
+    #y= plt.functions.griewank(points)
+    #highcond()
+
 
 def main():
     #Parameters
     dimnesions = 2
-    pop = 5
+    pop = 100
     nfc = 0
     max_nfc=5000*dimnesions
 
 
 
     nodes = population(dimnesions,pop)
+
+    counter =0
     while( nfc < max_nfc):
+        counter+=1
         newnodes = np.empty([dimnesions,pop])
         for i in range(0,pop):
             trialvec = nodes.crossover(nodes.mutation(),i)
@@ -67,7 +78,10 @@ def main():
                 newnodes[:,i] = nodes.points[:,i]
         nodes.setpoints(newnodes)
         nfc = nfc+1
+        #if counter%100 == 0:
+            #print func(nodes.points)
     print func(nodes.points)
+    print("Your points are ",nodes.points)
 
 
 

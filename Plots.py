@@ -14,18 +14,17 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import numpy as np
-import math
+from Functions import *
 
 
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-X = np.arange(-1, 1, 0.001)
-Y = np.arange(-1, 1, 0.001)
+X = np.arange(-0.001, 0.001, 0.00001)
+Y = np.arange(-0.001, 0.001, 0.00001)
 X, Y = np.meshgrid(X, Y)
 
-
+'''
 class functions(object):
 
 
@@ -133,12 +132,10 @@ class functions(object):
             count +=1
             firstProd *= np.power((1+count*self.insum(c)),(10/np.power(len(dim),1.2)))
         return (10/np.power(len(dim),2))*firstProd-(10/np.power(len(dim),2))
+'''
 
 
-functions = functions()
-R = functions.weirerstrass([X,Y])
-
-Z = R
+Z = rastrigin([X,Y])
 
 # Plot the surface.
 surf = ax.plot_surface(X, Y, Z, cmap=cm.cool_r,
@@ -146,7 +143,7 @@ surf = ax.plot_surface(X, Y, Z, cmap=cm.cool_r,
 
 # Customize the z axis.
 #ax.set_zlim(1.7, 1.74)
-#ax.zaxis.set_major_locator(LinearLocator(10))
+ax.zaxis.set_major_locator(LinearLocator(10))
 #ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
 
 # Add a color bar which maps values to colors.
