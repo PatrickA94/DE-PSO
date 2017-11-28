@@ -1,77 +1,80 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-from Functions import *
+import math
 #from Functions import *
+dimensions = 2
+size = 100
+max_nfc = 5000*dimensions
+c1 = 2.05
+c2 = 2.05
+
+
 
 class Particle(object):
-
-    def __init__(self, dimensions, c1, c2):
-        self.dimensions = dimensions
-        self.rangep = {'max':10,'min':-10}
-        self.points = np.random.uniform(self.rangep['min'],self.rangep['max'],size=(self.dimensions,1))
-        self.c1 = c1
-        self.c2 = c2
-        self.velocity = np.zeros(dimensions)
-        self.pbest = self.points
-        
-    def localBest(self):
-        if func(self.points) < func(self.pbest):
-            self.pbest = self.points
-        
-    def globalBest(self, gbest):
-        if func(self.points) < func(gbest):
-            return self.points
-        else:
-            return gbest
+    velocity = []
+    position = []
+    pbest = []
+    
+    def __init__(self, dimensions):
+        self.position = np.random.uniform(-10,10,size=(dimensions,1))
+        self.velocity = np.random.uniform(-0.2,0.2,size=(dimensions,1))
+        self.pbest = self.position
         
     def updateVelocities(self,gbest, w):
-        for i in range(0,self.dimensions):
-            cognitive = np.random.uniform(0,1)*self.c1
-            social = np.random.uniform(0,1)*self.c2
-            v_new = (w*self.velocity[i]) + (cognitive*(self.pbest[i]-self.points[i])) + (social*(gbest[i]-self.points[i]))
-            self.velocity[i] = v_new
+        for i in range(dimensions):
+            r1 = np.random.uniform(0,1)
+            r2 = np.random.uniform(0,1)
+            social = c1 * r1 * (gbest[i] - self.position[i])
+            cognitive = c2 * r2 * (self.pbest[i] - self.position[i])
+            self.velocity[i] = (w * self.velocity[i]) + social + cognitive
             
     def updatePosition(self):
-        for i in range(0,self.dimensions):
-            self.points[i] = self.points[i] + self.velocity[i]
+        for i in range(dimensions):
+            self.position[i] = self.position[i] + self.velocity[i]            
+
+def Ackley(dim):
+    firstSum = 0.0
+    secondSum = 0.0
+    for c in dim:
+        firstSum += c ** 2.0
+        secondSum += np.cos(2.0 * math.pi * c)
+    n = float(len(dim))
+    return -20.0 * math.exp(-0.2 * math.sqrt(firstSum / n)) - math.exp(secondSum / n) + 20 + math.e
 
 def func(points):
-    y = highCond(points)
+    y = Ackley(points)
     return y
 
 def main():
-    #Parameters
-    dimensions = 2
-    pop = 100
-    c1 = 2.05
-    c2 = 2.05
-    w = 0.9
-    nfc = 0
-    max_nfc = 100*dimensions
-    w_mod = ((0.9-0.4)/max_nfc)
-	
-    #Initialization of swarm
-    population = []
-    for i in range(0,pop):
-        p = Particle(dimensions, c1, c2)
-        population.append(p)
-        
-    #Determine initial gbest
-    gbest = population[0].pbest
-    for p in population:
-        if func(p.pbest) < func(gbest):
-            gbest = p.pbest
+    solution = []
+    swarm = []
+    
+    w = 0.7
+    w_mod = (0.4)/max_nfc
+    
+    for i in range(0,size):
+        particle = Particle(dimensions)
+        swarm.append(particle)
 
-    while( nfc < max_nfc ):
-        for i in population:
-            i.updateVelocities(gbest, w)
-            i.localBest()
-            gbest = i.globalBest(gbest)
-            i.updatePosition()
-        nfc = nfc + 1
+    gbest = swarm[0].position        
+    for i in range(max_nfc):
+        for s in swarm:
+            pbest = s.pbest
+            if func(pbest) < func(gbest):
+                    gbest = pbest   
+        solution = gbest
+        # Update position
+        for k in swarm:
+            k.updateVelocities(gbest, w)
+            k.updatePosition()
+        for l in swarm:
+            pbest = l.pbest
+            position = l.position
+            if func(position) < func(pbest):
+                swarm[l].pbest = swarm[l].position
         w = w - w_mod
-        
-    print("Global Best: " + str(gbest))
-    print("Global Best Val: " + str(func(gbest)))
-
+    print(solution)
+    print(func(solution))
+    return solution
+    
 main()
