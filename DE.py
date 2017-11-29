@@ -4,8 +4,6 @@ from Functions import *
 
 class population(object):
 
-
-
     def __init__(self, dimensions, nump=100):
 
         self.nump = nump
@@ -21,12 +19,10 @@ class population(object):
         X = np.random.choice(range(0,self.nump-1), size=3 , replace=False)
         return X
 
-
     def mutation(self):
         F = 0.8
         v = self.points[:,self.randselect()[0]] + F * (self.points[:,self.randselect()[2]] - self.points[:,self.randselect()[1]])
         return v
-
 
     def crossover(self,mutatedvec,pointno):
         Cr = 0.9
@@ -36,50 +32,51 @@ class population(object):
                 self.trialvec[j] = mutatedvec[j]
             else:
                 self.trialvec[j] = self.points[j,pointno]
-        #print("OG Vector ", self.points[:,pointno])
-        #print("Mutated vector ", mutatedvec)
         return self.trialvec
 
 
 def func(points):
-    y = Rosenbrock(points)
+    y = katsuura(points)
     return y
-
-
 
 
 def main():
     #Parameters
     dimnesions = 2
-    pop = 100
+    pop = 10
     nfc = 0
-    max_nfc=5000*dimnesions
-
-
-
+    max_nfc=30*dimnesions
+    runs = 51
+    run=0
+    allruns = []
     nodes = population(dimnesions,pop)
+    while (run < runs):
+        run = []
+        while( nfc < max_nfc):
+            newnodes = np.empty([dimnesions,pop])
+            for i in range(0,pop):
+                trialvec = nodes.crossover(nodes.mutation(),i)
+                if func(trialvec)<=func(nodes.points[:,i]):
+                    newnodes[:,i] = trialvec.reshape(dimnesions)
+                else:
+                    newnodes[:,i] = nodes.points[:,i]
+            nodes.setpoints(newnodes)
+            nfc = nfc+1
+            if nfc%pop == 0:
+                run.append(func(nodes.points))
+        allruns.append(run)
 
-    counter =0
-    while( nfc < max_nfc):
-        counter+=1
-        newnodes = np.empty([dimnesions,pop])
-        for i in range(0,pop):
-            trialvec = nodes.crossover(nodes.mutation(),i)
-            if func(trialvec)<=func(nodes.points[:,i]):
-                newnodes[:,i] = trialvec.reshape(dimnesions)
-            else:
-                newnodes[:,i] = nodes.points[:,i]
-        nodes.setpoints(newnodes)
-        nfc = nfc+1
-        #if counter%100 == 0:
-            #print func(nodes.points)
-    print func(nodes.points)
-    print("Your points are ",nodes.points)
+    allruns = np.asarray(allruns)
+    final_run =allruns[:,-1]
+    plot_runs = np.average(allruns,axis=1)[0] # This is for the plots
+
+    print final_run
+    return plot_runs, final_run
 
 
 
-
-main()
+if __name__ == "__main__":
+    main()
 
 
 

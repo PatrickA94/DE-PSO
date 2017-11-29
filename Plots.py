@@ -20,8 +20,8 @@ from Functions import *
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-X = np.arange(-0.001, 0.001, 0.00001)
-Y = np.arange(-0.001, 0.001, 0.00001)
+X = np.arange(-10, 10, 0.01)
+Y = np.arange(-10, 10, 0.01)
 X, Y = np.meshgrid(X, Y)
 
 '''
@@ -135,7 +135,7 @@ class functions(object):
 '''
 
 
-Z = rastrigin([X,Y])
+Z = griewank([X,Y])
 
 # Plot the surface.
 surf = ax.plot_surface(X, Y, Z, cmap=cm.cool_r,

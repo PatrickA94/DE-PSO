@@ -5,12 +5,12 @@ import numpy as np
 import Functions as fn
 
 
-X = np.arange(-100, 100, 0.1)
-Y = np.arange(-100, 100, 0.1)
+X = np.arange(-10, 10, 0.05)
+Y = np.arange(-10, 10, 0.05)
 X, Y = np.meshgrid(X, Y)
 
 
-funcparam = fn.Ackley
+funcparam = fn.bentCig
 Z = funcparam([X,Y])
 
 
