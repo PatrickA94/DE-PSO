@@ -44,12 +44,18 @@ def optimize(dim,func):
     dimnesions = dim
     pop = 100
     max_nfc=3000*dimnesions
-    runs = 5
+    runs = 3
     run=0
     allruns = []
+    allrunsmax=[]
+    allrunsmean=[]
+    allrunsstd = []
     nodes = population(dimnesions,pop)
     while (run < runs):
         rundata = []
+        rundatamax=[]
+        rundatamean = []
+        rundatastd = []
         nfc=0
         while( nfc < max_nfc):
             newnodes = np.empty([dimnesions,pop])
@@ -62,19 +68,33 @@ def optimize(dim,func):
             nodes.setpoints(newnodes)
             if nfc%pop == 0:
                 rundata.append(min(func(nodes.get_points())))
+                rundatamax.append(max(func(nodes.get_points())))
+                rundatamean.append(np.mean(func(nodes.get_points())))
+                rundatastd.append(np.std(func(nodes.get_points())))
             nfc = nfc + 1
         run = run+1
         if run%10==0:
             print('On run: ',run)
         allruns.append(rundata)
+        allrunsmax.append(rundatamax)
+        allrunsmean.append(rundatamean)
+        allrunsstd.append(rundatastd)
 
     allruns = np.asarray(allruns)
+    allrunsmax = np.asarray(allrunsmax)
+    allrunsmean = np.asarray(allrunsmean)
+    allrunsstd = np.asarray(allrunsstd)
     allruns = np.reshape(allruns,(runs,max_nfc/pop) )
-    final_run =allruns[:,-1]
-
+    allrunsmax = np.reshape(allrunsmax,(runs,max_nfc/pop) )
+    allrunsmean = np.reshape(allrunsmean,(runs,max_nfc/pop) )
+    allrunsstd = np.reshape(allrunsstd,(runs,max_nfc/pop) )
+    final_runmin =allruns[:,-1]
+    final_runmax =allrunsmax[:,-1]
+    final_runmean =allrunsmean[:,-1]
+    final_runstd =allrunsstd[:,-1]
     plot_runs = np.average(allruns,axis=0) # This is for the plots
 
-    return plot_runs, final_run
+    return plot_runs, final_runmin,final_runmax,final_runmean,final_runstd
 
 
 

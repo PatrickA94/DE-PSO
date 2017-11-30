@@ -15,6 +15,8 @@ def make_plot(func,dim,deplot):
     #plt.plot(dexvals, deyvals, 'b',dexvals,psoyvals,'r')
     plt.ylabel('Best fitness error so far')
     plt.xlabel('NFC')
+    plt.grid(True)
+    plt.yscale('log')
     plt.title(title)
     plt.legend(loc='best', ncol=1, mode="expand", shadow=True, fancybox=True)
 
@@ -22,7 +24,7 @@ def make_plot(func,dim,deplot):
     plt.savefig('performanceplots/'+title.replace(' ','')+'.png')
     plt.close()
 
-def make_table(func,detable):
+def make_table(func,tablesmax,tablesmin,tablesmean,tablesstd):
     title = str(func.func_name)
 
     options = {
@@ -33,45 +35,101 @@ def make_table(func,detable):
         'margin-left': '0.75in',
     }
 
-    data = prep_table_data(detable)
+    data = prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd)
     data.to_html('table/'+title.replace(' ','')+'.html')
     pdfkit.from_url('table/'+title.replace(' ','')+'.html', 'table/'+title.replace(' ','')+'.pdf',options=options)
 
 
 
-def prep_table_data(detables):
+def prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd):
+
+
+
     dedatas={}
-    for count,detable in enumerate(detables):
-        dedata={}
-        if count == 0: dim = '2'
-        elif count == 1: dim = '5'
-        else: dim = '10'
-        mean = np.mean(detable)
-        worst = np.max(detable)
-        best = np.min(detable)
-        std = np.std(detable)
-        dedata['mean'] = mean
-        dedata['worst'] = worst
-        dedata['best'] = best
-        dedata['std'] = std
-        dedatas[dim]=dedata
+    #2
+    dedata={}
+    dedata['mean'] = np.mean(tablesmean[0])
+    dedata['worst'] = np.max(tablesmax[0])
+    dedata['best'] = np.min(tablesmin[0])
+    dedata['std'] = np.mean(tablesstd[0])
+    dedatas['2'] = dedata
 
 
-    psodatas = {}
-    for count,psotable in enumerate(detables):
-        psodata = {}
-        if count == 0: dim = '2'
-        elif count == 1: dim = '5'
-        else: dim = '10'
-        mean = np.mean(psotable)
-        worst = np.max(psotable)
-        best = np.min(psotable)
-        std = np.std(psotable)
-        psodata['mean'] = mean
-        psodata['worst'] = worst
-        psodata['best'] = best
-        psodata['std'] = std
-        psodatas[dim] =psodata
+    #5
+    dedata={}
+    dedata['mean'] = np.mean(tablesmean[1])
+    dedata['worst'] = np.max(tablesmax[1])
+    dedata['best'] = np.min(tablesmin[1])
+    dedata['std'] = np.mean(tablesstd[1])
+    dedatas['5'] = dedata
+    #10
+    dedata={}
+    dedata['mean'] = np.mean(tablesmean[2])
+    dedata['worst'] = np.max(tablesmax[2])
+    dedata['best'] = np.min(tablesmin[2])
+    dedata['std'] = np.mean(tablesstd[2])
+    dedatas['10'] = dedata
+
+
+    psodatas={}
+    #2
+    psodata={}
+    psodata['mean'] = np.mean(tablesmean[0])
+    psodata['worst'] = np.max(tablesmax[0])
+    psodata['best'] = np.min(tablesmin[0])
+    psodata['std'] = np.mean(tablesstd[0])
+    psodatas['2'] = psodata
+
+
+    #5
+    psodata={}
+    psodata['mean'] = np.mean(tablesmean[1])
+    psodata['worst'] = np.max(tablesmax[1])
+    psodata['best'] = np.min(tablesmin[1])
+    psodata['std'] = np.mean(tablesstd[1])
+    psodatas['5'] = psodata
+    #10
+    psodata={}
+    psodata['mean'] = np.mean(tablesmean[2])
+    psodata['worst'] = np.max(tablesmax[2])
+    psodata['best'] = np.min(tablesmin[2])
+    psodata['std'] = np.mean(tablesstd[2])
+    psodatas['10'] = psodata
+
+
+    #
+    #
+    # for count,detable in enumerate(tablesmax):
+    #     dedata={}
+    #     if count == 0: dim = '2'
+    #     elif count == 1: dim = '5'
+    #     else: dim = '10'
+    #     mean = np.mean(detable)
+    #     worst = np.max(detable)
+    #     best = np.min(detable)
+    #     std = np.std(detable)
+    #     dedata['mean'] = mean
+    #     dedata['worst'] = worst
+    #     dedata['best'] = best
+    #     dedata['std'] = std
+    #     dedatas[dim]=dedata
+    #
+    #
+    # psodatas = {}
+    # for count,psotable in enumerate(detables):
+    #     psodata = {}
+    #     if count == 0: dim = '2'
+    #     elif count == 1: dim = '5'
+    #     else: dim = '10'
+    #     mean = np.mean(psotable)
+    #     worst = np.max(psotable)
+    #     best = np.min(psotable)
+    #     std = np.std(psotable)
+    #     psodata['mean'] = mean
+    #     psodata['worst'] = worst
+    #     psodata['best'] = best
+    #     psodata['std'] = std
+    #     psodatas[dim] =psodata
 
 
     dedim2 = pd.DataFrame.from_dict({'val':dedatas['2']},)
