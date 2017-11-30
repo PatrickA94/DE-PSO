@@ -34,50 +34,47 @@ class population(object):
                 self.trialvec[j] = self.points[j,pointno]
         return self.trialvec
 
-
-def func(points):
-    y = katsuura(points)
-    return y
+    def get_points(self):
+        return self.points
 
 
-def main():
+
+def optimize(dim,func):
     #Parameters
-    dimnesions = 2
-    pop = 10
-    nfc = 0
-    max_nfc=30*dimnesions
-    runs = 51
+    dimnesions = dim
+    pop = 100
+    max_nfc=3000*dimnesions
+    runs = 5
     run=0
     allruns = []
     nodes = population(dimnesions,pop)
     while (run < runs):
-        run = []
+        rundata = []
+        nfc=0
         while( nfc < max_nfc):
             newnodes = np.empty([dimnesions,pop])
             for i in range(0,pop):
                 trialvec = nodes.crossover(nodes.mutation(),i)
-                if func(trialvec)<=func(nodes.points[:,i]):
+                if func(trialvec)<=func(nodes.get_points()[:,i]):
                     newnodes[:,i] = trialvec.reshape(dimnesions)
                 else:
-                    newnodes[:,i] = nodes.points[:,i]
+                    newnodes[:,i] = nodes.get_points()[:,i]
             nodes.setpoints(newnodes)
-            nfc = nfc+1
             if nfc%pop == 0:
-                run.append(func(nodes.points))
-        allruns.append(run)
+                rundata.append(min(func(nodes.get_points())))
+            nfc = nfc + 1
+        run = run+1
+        if run%10==0:
+            print('On run: ',run)
+        allruns.append(rundata)
 
     allruns = np.asarray(allruns)
+    allruns = np.reshape(allruns,(runs,max_nfc/pop) )
     final_run =allruns[:,-1]
-    plot_runs = np.average(allruns,axis=1)[0] # This is for the plots
 
-    print final_run
+    plot_runs = np.average(allruns,axis=0) # This is for the plots
+
     return plot_runs, final_run
-
-
-
-if __name__ == "__main__":
-    main()
-
 
 
 

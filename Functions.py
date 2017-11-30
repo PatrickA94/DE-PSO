@@ -27,7 +27,6 @@ def rosen(dim):
     firstSum = 0
     dim2 = dim[:-1]
     for count, c in enumerate(dim2):
-        print count
         firstSum = (100 * np.power((np.power(c, 2) - dim[count + 1]), 2) + np.power((c - 1), 2))
         count += 1
     return firstSum
