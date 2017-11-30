@@ -20,8 +20,10 @@ def make_plot(func,dim,deplot,psoplot=None):
     plt.title(title)
     plt.legend(loc='best', ncol=1, mode="expand", shadow=True, fancybox=True)
 
-
-    plt.savefig('performanceplots/'+title.replace(' ','')+'.png')
+    if psoplot != None:
+        plt.savefig('performanceplots/pso'+title.replace(' ','')+'.png')
+    else:
+        plt.savefig('performanceplots/'+title.replace(' ','')+'.png')
     plt.close()
 
 def make_table(func,tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesminp,tablesmeanp,tablesstdp):
