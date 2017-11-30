@@ -3,20 +3,20 @@ import numpy as np
 import pandas as pd
 import pdfkit
 
+#def make_plot(func,dim,deplot,):
 
-#def make_plot(func,dim,deplot,psoplot):
-def make_plot(func,dim,deplot):
+def make_plot(func,dim,deplot,psoplot=None):
     title = str(func.func_name)+' '+str(dim) + ' dimensions'
     dexvals = np.linspace(0,3000*dim,len(deplot))
     deyvals = deplot
-    #psoyvals = psoplot
+    psoyvals = psoplot
 
     plt.plot(dexvals,deyvals,'b',label='DE')
-    #plt.plot(dexvals, deyvals, 'b',dexvals,psoyvals,'r')
+    if psoplot != None:
+        plt.plot(dexvals, psoyvals,'r', label="PSO")
     plt.ylabel('Best fitness error so far')
     plt.xlabel('NFC')
     plt.grid(True)
-    plt.yscale('log')
     plt.title(title)
     plt.legend(loc='best', ncol=1, mode="expand", shadow=True, fancybox=True)
 
@@ -24,7 +24,7 @@ def make_plot(func,dim,deplot):
     plt.savefig('performanceplots/'+title.replace(' ','')+'.png')
     plt.close()
 
-def make_table(func,tablesmax,tablesmin,tablesmean,tablesstd):
+def make_table(func,tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesminp,tablesmeanp,tablesstdp):
     title = str(func.func_name)
 
     options = {
@@ -35,13 +35,13 @@ def make_table(func,tablesmax,tablesmin,tablesmean,tablesstd):
         'margin-left': '0.75in',
     }
 
-    data = prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd)
+    data = prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesminp,tablesmeanp,tablesstdp)
     data.to_html('table/'+title.replace(' ','')+'.html')
     pdfkit.from_url('table/'+title.replace(' ','')+'.html', 'table/'+title.replace(' ','')+'.pdf',options=options)
 
 
 
-def prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd):
+def prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesminp,tablesmeanp,tablesstdp):
 
 
 
@@ -74,26 +74,26 @@ def prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd):
     psodatas={}
     #2
     psodata={}
-    psodata['mean'] = np.mean(tablesmean[0])
-    psodata['worst'] = np.max(tablesmax[0])
-    psodata['best'] = np.min(tablesmin[0])
-    psodata['std'] = np.mean(tablesstd[0])
+    psodata['mean'] = np.mean(tablesmeanp[0])
+    psodata['worst'] = np.max(tablesmaxp[0])
+    psodata['best'] = np.min(tablesminp[0])
+    psodata['std'] = np.mean(tablesstdp[0])
     psodatas['2'] = psodata
 
 
     #5
     psodata={}
-    psodata['mean'] = np.mean(tablesmean[1])
-    psodata['worst'] = np.max(tablesmax[1])
-    psodata['best'] = np.min(tablesmin[1])
-    psodata['std'] = np.mean(tablesstd[1])
+    psodata['mean'] = np.mean(tablesmeanp[1])
+    psodata['worst'] = np.max(tablesmaxp[1])
+    psodata['best'] = np.min(tablesminp[1])
+    psodata['std'] = np.mean(tablesstdp[1])
     psodatas['5'] = psodata
     #10
     psodata={}
-    psodata['mean'] = np.mean(tablesmean[2])
-    psodata['worst'] = np.max(tablesmax[2])
-    psodata['best'] = np.min(tablesmin[2])
-    psodata['std'] = np.mean(tablesstd[2])
+    psodata['mean'] = np.mean(tablesmeanp[2])
+    psodata['worst'] = np.max(tablesmaxp[2])
+    psodata['best'] = np.min(tablesminp[2])
+    psodata['std'] = np.mean(tablesstdp[2])
     psodatas['10'] = psodata
 
 

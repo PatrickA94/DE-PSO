@@ -43,7 +43,7 @@ def optimize(dim,func):
     #Parameters
     dimnesions = dim
     pop = 100
-    max_nfc=3000*dimnesions
+    max_nfc=300*dimnesions
     runs = 3
     run=0
     allruns = []
