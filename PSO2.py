@@ -16,11 +16,7 @@ class Particle(object):
 
     def __init__(self, dimensions):
         self.position = np.random.uniform(-10, 10, size=(dimensions, 1))
-        for i in range(dimensions):
-            self.position[i] = float("{0:.10f}".format(float(self.position[i])))
         self.velocity = np.random.uniform(-0.2, 0.2, size=(dimensions, 1))
-        for i in range(dimensions):
-            self.velocity[i] = float("{0:.10f}".format(float(self.velocity[i])))
         self.pbest = self.position
 
     def updateVelocities(self, gbest, w, dimensions):
@@ -30,8 +26,6 @@ class Particle(object):
             social = c1 * r1 * (gbest[i] - self.position[i])
             cognitive = c2 * r2 * (self.pbest[i] - self.position[i])
             self.velocity[i] = (w * self.velocity[i]) + social + cognitive
-            for i in range(dimensions):
-                self.velocity[i] = float("{0:.10f}".format(float(self.velocity[i])))
 
     def updatePosition(self, dimensions):
         for i in range(dimensions):
@@ -40,9 +34,7 @@ class Particle(object):
                 for i in range(dimensions):
                     self.position[i] = np.random.uniform(-10, 10)
                 break
-            self.position[i] = float("{0:.10f}".format(float(self.position[i])))
-
-
+                
 def func(points):
     y = Ackley(points)
     return y
