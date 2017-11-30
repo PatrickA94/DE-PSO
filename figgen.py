@@ -12,7 +12,7 @@ def make_plot(func,dim,deplot,psoplot=None):
     psoyvals = psoplot
 
     plt.plot(dexvals,deyvals,'b',label='DE')
-    if psoplot != None:
+    if psoplot is not None:
         plt.plot(dexvals, psoyvals,'r', label="PSO")
     plt.ylabel('Best fitness error so far')
     plt.xlabel('NFC')
@@ -20,7 +20,7 @@ def make_plot(func,dim,deplot,psoplot=None):
     plt.title(title)
     plt.legend(loc='best', ncol=1, mode="expand", shadow=True, fancybox=True)
 
-    if psoplot != None:
+    if psoplot is not None:
         plt.savefig('performanceplots/pso'+title.replace(' ','')+'.png')
     else:
         plt.savefig('performanceplots/'+title.replace(' ','')+'.png')
