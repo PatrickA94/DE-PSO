@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-import math
-#from Functions import *
-dimensions = 2
+from Functions import *
+dimensions = 5
 size = 100
 max_nfc = 5000*dimensions
 c1 = 2.05
@@ -30,16 +29,13 @@ class Particle(object):
             
     def updatePosition(self):
         for i in range(dimensions):
-            self.position[i] = self.position[i] + self.velocity[i]            
-
-def Ackley(dim):
-    firstSum = 0.0
-    secondSum = 0.0
-    for c in dim:
-        firstSum += c ** 2.0
-        secondSum += np.cos(2.0 * math.pi * c)
-    n = float(len(dim))
-    return -20.0 * math.exp(-0.2 * math.sqrt(firstSum / n)) - math.exp(secondSum / n) + 20 + math.e
+            self.position[i] = self.position[i] + self.velocity[i]
+            if (self.position[i] > 10):
+                self.position[i] = 10
+                self.velocity[i] = 0
+            elif (self.position[i] < -10):
+                self.position[i] = -10
+                self.velocity[i] = 0
 
 def func(points):
     y = Ackley(points)
@@ -49,19 +45,40 @@ def main():
     solution = []
     swarm = []
     
-    w = 0.7
-    w_mod = (0.4)/max_nfc
+    w = 0.9
+    w_mod = (0.5)/max_nfc
     
+    print("Initializing "+str(size)+" particles...")
     for i in range(0,size):
         particle = Particle(dimensions)
         swarm.append(particle)
 
-    gbest = swarm[0].position        
+    gbest = swarm[0].position
+    print("Iterating "+str(max_nfc)+" times...")
     for i in range(max_nfc):
+        if (i%1000 == 0 and i>0):
+            print("Iterating: "+str(i)+"/"+str(max_nfc))
+            print("X1: "+str(solution[0]))
+            print("X2: "+str(solution[1]))
+            if (dimensions == 5):
+                print("X3: "+str(solution[2]))
+                print("X4: "+str(solution[3]))
+                print("X5: "+str(solution[4]))
+            if (dimensions == 10):
+                print("X3: "+str(solution[2]))
+                print("X4: "+str(solution[3]))
+                print("X5: "+str(solution[4]))
+                print("X6: "+str(solution[5]))
+                print("X7: "+str(solution[6]))
+                print("X8: "+str(solution[7]))
+                print("X9: "+str(solution[8]))
+                print("X10: "+str(solution[9]))
+            print("Current Solution: "+str(func(solution)))
         for s in swarm:
             pbest = s.pbest
-            if func(pbest) < func(gbest):
-                    gbest = pbest   
+            # func(pbest) < func(gbest)
+            if np.less(func(pbest),func(gbest)):
+                    gbest = pbest
         solution = gbest
         # Update position
         for k in swarm:
@@ -70,11 +87,25 @@ def main():
         for l in swarm:
             pbest = l.pbest
             position = l.position
-            if func(position) < func(pbest):
+            if np.less(func(position), func(pbest)):
                 swarm[l].pbest = swarm[l].position
         w = w - w_mod
-    print(solution)
-    print(func(solution))
+    print("X1: "+str(solution[0]))
+    print("X2: "+str(solution[1]))
+    if (dimensions == 5):
+        print("X3: "+str(solution[2]))
+        print("X4: "+str(solution[3]))
+        print("X5: "+str(solution[4]))
+    if (dimensions == 10):
+        print("X3: "+str(solution[2]))
+        print("X4: "+str(solution[3]))
+        print("X5: "+str(solution[4]))
+        print("X6: "+str(solution[5]))
+        print("X7: "+str(solution[6]))
+        print("X8: "+str(solution[7]))
+        print("X9: "+str(solution[8]))
+        print("X10: "+str(solution[9]))
+    print("Result: "+str(func(solution)))
     return solution
     
 main()
