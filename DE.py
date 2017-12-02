@@ -69,8 +69,8 @@ def optimize(dim,func):
     #Parameters
     dimnesions = dim
     pop = 100
-    max_nfc=300*dimnesions
-    runs = 2
+    max_nfc=3000*dimnesions
+    runs = 51
     run=0
     allruns = []
     allrunsmax=[]
@@ -130,4 +130,4 @@ def optimize(dim,func):
 
     return plot_runs, final_runmin,final_runmax,final_runmean,final_runstd
 
-cProfile.run('optimize(2, highCond)',sort='tottime')
+#cProfile.run('optimize(2, highCond)',sort='tottime')

@@ -26,6 +26,9 @@ def make_plot(func,dim,deplot,psoplot=None):
         plt.savefig('performanceplots/'+title.replace(' ','')+'.png')
     plt.close()
 
+
+
+
 def make_table(func,tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesminp,tablesmeanp,tablesstdp):
     title = str(func.func_name)
 
@@ -37,8 +40,19 @@ def make_table(func,tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesmi
         'margin-left': '0.75in',
     }
 
+
+
+
     data = prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesminp,tablesmeanp,tablesstdp)
-    data.to_html('table/'+title.replace(' ','')+'.html')
+    data.to_pickle('datas/'+title.replace(' ','')+'.pickle')
+
+    data = data.style.highlight_max(axis=1,color='green').highlight_min(axis=1,color='red')
+    data =data.render()
+
+    with open('table/'+title.replace(' ','')+'.html', 'w') as f:
+        f.write(data)
+
+    #data.to_html('table/'+title.replace(' ','')+'.html')
     pdfkit.from_url('table/'+title.replace(' ','')+'.html', 'table/'+title.replace(' ','')+'.pdf',options=options)
 
 
@@ -99,41 +113,6 @@ def prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesmi
     psodatas['10'] = psodata
 
 
-    #
-    #
-    # for count,detable in enumerate(tablesmax):
-    #     dedata={}
-    #     if count == 0: dim = '2'
-    #     elif count == 1: dim = '5'
-    #     else: dim = '10'
-    #     mean = np.mean(detable)
-    #     worst = np.max(detable)
-    #     best = np.min(detable)
-    #     std = np.std(detable)
-    #     dedata['mean'] = mean
-    #     dedata['worst'] = worst
-    #     dedata['best'] = best
-    #     dedata['std'] = std
-    #     dedatas[dim]=dedata
-    #
-    #
-    # psodatas = {}
-    # for count,psotable in enumerate(detables):
-    #     psodata = {}
-    #     if count == 0: dim = '2'
-    #     elif count == 1: dim = '5'
-    #     else: dim = '10'
-    #     mean = np.mean(psotable)
-    #     worst = np.max(psotable)
-    #     best = np.min(psotable)
-    #     std = np.std(psotable)
-    #     psodata['mean'] = mean
-    #     psodata['worst'] = worst
-    #     psodata['best'] = best
-    #     psodata['std'] = std
-    #     psodatas[dim] =psodata
-
-
     dedim2 = pd.DataFrame.from_dict({'val':dedatas['2']},)
     dedim5 = pd.DataFrame.from_dict({'val':dedatas['5']},)
     dedim10 = pd.DataFrame.from_dict({'val':dedatas['10']},)
@@ -145,6 +124,8 @@ def prep_table_data(tablesmax,tablesmin,tablesmean,tablesstd,tablesmaxp,tablesmi
     df1 = pd.concat([dedim2,dedim5,dedim10],axis=0,keys=['2','5','10'],)
     df2 = pd.concat([psodim2,psodim5,psodim10],axis=0,keys=['2','5','10'],)
     df = pd.concat([df1,df2], axis=1, keys=['DE', 'PSO'])
+
+
 
     return df
 
