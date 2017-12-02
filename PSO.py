@@ -33,7 +33,7 @@ class Particle(object):
             self.position[i] = self.position[i] + self.velocity[i]
             if (self.position[i] > 10 or self.position[i] < -10):
                 for i in range(dimensions):
-                    self.position[i] = np.random.uniform(-10,10)
+                    self.position[i] = (20*np.random.sample())-10
                 break
 
 def func(points):
