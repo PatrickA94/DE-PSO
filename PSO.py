@@ -22,8 +22,8 @@ class Particle(object):
         
     def updateVelocities(self,gbest, w, dimensions):
         for i in range(dimensions):
-            r1 = np.random.uniform(0,1)
-            r2 = np.random.uniform(0,1)
+            r1 = np.random.sample()
+            r2 = np.random.sample()
             social = c1 * r1 * (gbest[i] - self.position[i])
             cognitive = c2 * r2 * (self.pbest[i] - self.position[i])
             self.velocity[i] = (w * self.velocity[i]) + social + cognitive
