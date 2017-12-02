@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from Functions import *
+import cProfile
+import sys
 
 dimensions = 2
 size = 100
@@ -22,6 +24,8 @@ class Particle(object):
         
     def updateVelocities(self,gbest, w, dimensions):
         for i in range(dimensions):
+            #r1 = np.random.uniform(0,1)
+            #r2 = np.random.uniform(0,1)
             r1 = np.random.sample()
             r2 = np.random.sample()
             social = c1 * r1 * (gbest[i] - self.position[i])
@@ -37,32 +41,41 @@ class Particle(object):
                 break
 
 def func(points):
-    y = highCond(points)
+    y = Ackley(points)
     return y
-
-def check(i, solution):
-    if (i%100 == 0 and i>0):
-        print("Iterating: "+str(i)+"/"+str(max_nfc))
-        print("X1: "+str(solution[0]))
-        print("X2: "+str(solution[1]))
-        if (dimensions == 5):
-            print("X3: "+str(solution[2]))
-            print("X4: "+str(solution[3]))
-            print("X5: "+str(solution[4]))
-        if (dimensions == 10):
-            print("X3: "+str(solution[2]))
-            print("X4: "+str(solution[3]))
-            print("X5: "+str(solution[4]))
-            print("X6: "+str(solution[5]))
-            print("X7: "+str(solution[6]))
-            print("X8: "+str(solution[7]))
-            print("X9: "+str(solution[8]))
-            print("X10: "+str(solution[9]))
-        print("Current Solution: "+str(func(solution)))
+        
+def monitor(i):
+    if (i%1000 == 0):
+        print
+        sys.stdout.write("Working")
+        sys.stdout.flush()
+    elif (i%100 == 0):
+        sys.stdout.write(".")
+        sys.stdout.flush()
+        
+def answer(solution):
+    print
+    print("X1: "+str(solution[0]))
+    print("X2: "+str(solution[1]))
+    if (dimensions == 5):
+        print("X3: "+str(solution[2]))
+        print("X4: "+str(solution[3]))
+        print("X5: "+str(solution[4]))
+    if (dimensions == 10):
+        print("X3: "+str(solution[2]))
+        print("X4: "+str(solution[3]))
+        print("X5: "+str(solution[4]))
+        print("X6: "+str(solution[5]))
+        print("X7: "+str(solution[6]))
+        print("X8: "+str(solution[7]))
+        print("X9: "+str(solution[8]))
+        print("X10: "+str(solution[9]))
+    print("Current Solution: "+str(func(solution)))
 
 def main():
     solution = []
     swarm = []
+    pbestValArray = np.zeros(size)
     
     w = 0.9
     w_mod = (0.5)/max_nfc
@@ -74,21 +87,31 @@ def main():
 
     print("Iterating "+str(max_nfc)+" times...")
     gbest = np.copy(swarm[0].position)
+    gbestVal = func(gbest)
     for i in range(max_nfc):
-        check(i, solution)
+        #check(i, solution)
+        monitor(i)
+        sC = 0
         for s in swarm:
-            if np.less(func(s.pbest), func(gbest)):
+            pbestVal = func(s.pbest)
+            pbestValArray[sC] = pbestVal
+            sC = sC + 1
+            if np.less(pbestVal, gbestVal):
                     gbest = np.copy(s.pbest)
+                    gbestVal = func(gbest)
         solution = np.copy(gbest)
         # Update position
         for k in swarm:
             k.updateVelocities(gbest, w, dimensions)
             k.updatePosition(dimensions)
+        lC = 0
         for l in swarm:
-            if np.less(func(l.position), func(l.pbest)):
+            pbestEval = pbestValArray[lC]
+            lC = lC + 1
+            if np.less(func(l.position), pbestEval):
                 l.pbest = np.copy(l.position)
         w = w - w_mod
-    check(100,solution)
+    answer(solution)
     return solution
 
 main()
