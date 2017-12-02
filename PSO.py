@@ -100,6 +100,9 @@ def main():
                     gbest = np.copy(s.pbest)
                     gbestVal = func(gbest)
         solution = np.copy(gbest)
+        # Get Solution Every 100 Iterations
+        if (i%100 == 0):
+            # DO WHAT YOU NEED TO DO WITH gbestVal
         # Update position
         for k in swarm:
             k.updateVelocities(gbest, w, dimensions)
