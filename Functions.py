@@ -1,6 +1,8 @@
 import numpy as np
 import math
 
+
+
 def highCond(dim):
     firstSum = 0
     for count, c in enumerate(dim):
@@ -44,19 +46,31 @@ def Ackley(dim):
 
 # Weierstrass
 def innersum(dim):
+
+
     kmax = 20
     a = 0.5
     b = 3
     sum1 = 0
+    pi2 = 2*math.pi
+    dim5 = dim+0.5
+    k = range(0,kmax)
+    aa = np.power(a,k)
+    bb = np.power(b,k)
     for k in range(0, kmax):
-        sum1 += (np.power(a, k) * np.cos(2 * math.pi * np.power(b, k) * (dim + 0.5)))
+        sum1 += (aa[k] * np.cos(pi2 * bb[k] * dim5))
     return sum1
+
+
+
 
 
 def insum(dim):
     firstSum = 0
+
     for j in range(1, 32):
-        firstSum += ((np.power(2, j) * dim - np.round(np.power(2, j) * dim)) / np.power(2, j))
+        powe = np.power(2, j)
+        firstSum += ((powe * dim - np.round(powe * dim)) / powe)
     return firstSum
 
 
@@ -65,8 +79,9 @@ def innersum2():
     a = 0.5
     b = 3
     sum1 = 0
+    pi2 = 2*math.pi
     for k in range(0, kmax):
-        sum1 += (np.power(a, k) * np.cos(2 * math.pi * np.power(b, k) * 0.5))
+        sum1 += (np.power(a, k) * np.cos(pi2 * np.power(b, k) * 0.5))
     return sum1
 
 
@@ -98,7 +113,9 @@ def rastrigin(dim):
 
 def katsuura(dim):
     firstProd = 10
+
+    dividor = 10 / np.power(len(dim), 1.2)
     for count, c in enumerate(dim):
         count += 1
-        firstProd *= np.power((1 + count * insum(c)), (10 / np.power(len(dim), 1.2)))
+        firstProd *= np.power((1 + count * insum(c)),dividor)
     return (10 / np.power(len(dim), 2)) * firstProd - (10 / np.power(len(dim), 2))

@@ -1,14 +1,14 @@
 import numpy as np
 from Functions import *
 from DE import optimize
-from PSO import opt
+from PSO3 import opt
 from figgen import make_plot, make_table
 import cProfile
 
 def main():
     dims = [2,5,10]
 
-    funcs =[weirerstrass,griewank]
+    funcs =[weirerstrass]
 
 
     for func in funcs:
@@ -43,8 +43,8 @@ def main():
 
         #make_table(func,tablesmaxp,tablesminp,tablesmeanp,tablesstdp)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
-
+cProfile.run('main()',sort="tottime")
 

@@ -66,11 +66,12 @@ class population(object):
 
 
 def optimize(dim,func):
+    print('Started DE')
     #Parameters
     dimnesions = dim
     pop = 100
     max_nfc=3000*dimnesions
-    runs = 51
+    runs = 5
     run=0
     allruns = []
     allrunsmax=[]
@@ -107,7 +108,7 @@ def optimize(dim,func):
                 rundatastd.append(np.std(nodes.get_current_fitness()))
             nfc = nfc + 1
         run = run+1
-        if run%10==0:
+        if run%2==0:
             print('On run: ',run)
         allruns.append(rundata)
         allrunsmax.append(rundatamax)

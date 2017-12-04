@@ -8,7 +8,7 @@ import cProfile
 def main():
     dims = [2,5,10]
 
-    funcs =[rastrigin,katsuura]
+    funcs =[katsuura]
 
 
     for func in funcs:
@@ -43,8 +43,9 @@ def main():
 
         #make_table(func,tablesmaxp,tablesminp,tablesmeanp,tablesstdp)
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()
 
+cProfile.run('main()', sort='tottime')
 
 

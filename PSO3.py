@@ -92,19 +92,18 @@ def opt(dim,func):
     w = 0.9
     w_mod = (0.5)/max_nfc
 
-    runs = 51
+    runs = 5
     run = 0
     allruns = []
     allrunsmax = []
     allrunsmean = []
     allrunsstd = []
     
-    print("Initializing "+str(size)+" particles...")
+    print("Starting PSO")
     for i in range(0,size):
         particle = Particle(dimensions)
         swarm.append(particle)
 
-    print("Iterating "+str(max_nfc)+" times...")
     gbest = np.copy(swarm[0].position)
     gbestVal = func(gbest)
     while (run < runs):
@@ -143,7 +142,7 @@ def opt(dim,func):
                 rundatamean.append(np.mean(pbestValArray))
                 rundatastd.append(np.std(pbestValArray))
         run = run + 1
-        if run%10==0:
+        if run%2==0:
             print('On run: ',run)
         allruns.append(rundata)
         allrunsmax.append(rundatamax)
